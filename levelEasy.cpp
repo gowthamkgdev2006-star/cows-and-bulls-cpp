@@ -6,6 +6,9 @@ using namespace std;
 
 string secretWord;
 int wordLength;
+string guessHistory[100];
+string resultHistory[100];
+int attempts = 0;
 
 void clearScreen()
 {
@@ -20,18 +23,103 @@ void pauseScreen()
 }
 void player2()
 {
-    cout << "=======================================" << endl;
-    cout << "           PLAYER 2 : GUESS WORD       " << endl;
-    cout << "=======================================" << endl;
-    for (int i = 0; i < wordLength; i++)
-    {
-        cout << "_ ";
-    }
-    cout <<"Guess the secret word: ";
-
     string guessWord;
-    cin >> guessWord;
-    cout <<  guessWord << endl;
+
+    while (true)
+    {
+        clearScreen();
+
+        cout << "==========================================" << endl;
+        cout << "           PLAYER 2 : GUESS WORD          " << endl;
+        cout << "==========================================" << endl << endl;
+
+        cout << "Word Length : " << wordLength << endl;
+        cout << "Attempts    : " << attempts << endl << endl;
+
+        // Show previous attempts
+        for (int i = 0; i < attempts; i++)
+        {
+            cout << "Attempt " << i + 1 << " : ";
+
+            for (char ch : guessHistory[i])
+                cout << ch << " ";
+
+            cout << endl;
+
+            cout << "            ";
+
+            for (char ch : resultHistory[i])
+                cout << ch << " ";
+
+            cout << endl << endl;
+        }
+
+        cout << "Guess : ";
+        cin >> guessWord;
+
+        // Convert to uppercase
+        for (int i = 0; i < guessWord.length(); i++)
+            guessWord[i] = toupper(guessWord[i]);
+
+        // Length validation
+        if (guessWord.length() != wordLength)
+        {
+            cout << "\nWord must contain exactly "
+                 << wordLength << " letters." << endl;
+            pauseScreen();
+            continue;
+        }
+
+        attempts++;
+
+        guessHistory[attempts - 1] = guessWord;
+
+        string result = "";
+
+        // Bulls & Cows
+        for (int i = 0; i < wordLength; i++)
+        {
+            if (guessWord[i] == secretWord[i])
+            {
+                result += "B";
+            }
+            else
+            {
+                bool found = false;
+
+                for (int j = 0; j < wordLength; j++)
+                {
+                    if (guessWord[i] == secretWord[j])
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found)
+                    result += "C";
+                else
+                    result += "X";
+            }
+        }
+
+        resultHistory[attempts - 1] = result;
+
+        // Win
+        if (guessWord == secretWord)
+        {
+            clearScreen();
+
+            cout << "==========================================" << endl;
+            cout << "              YOU WIN!                    " << endl;
+            cout << "==========================================" << endl << endl;
+
+            cout << "Secret Word : " << secretWord << endl;
+            cout << "Attempts    : " << attempts << endl;
+
+            break;
+        }
+    }
 }
 void player1()
 {
