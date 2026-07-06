@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
 #include<cstdlib>
+#include<cctype>
 using namespace std;
 
 string secretWord;
@@ -56,30 +57,30 @@ void player1()
 
         bool valid = true;
 
-for (int i = 0; i < secretWord.length(); i++)
-{
-    if (!isalpha(secretWord[i]))
-    {
-        valid = false;
-        break;
-    }
+        for (int i = 0; i < secretWord.length(); i++)
+        {   
+            if (!isalpha(secretWord[i]))
+            {
+                valid = false;
+                break;
+            }
 
-    // Convert every letter to uppercase
-    secretWord[i] = toupper(secretWord[i]);
-}
+        // Convert every letter to uppercase
+        secretWord[i] = toupper(secretWord[i]);
+        }
 
-if (!valid)
-{
-    cout << "\n========================================" << endl;
-    cout << "Invalid Secret Word!" << endl;
-    cout << "Please enter letters only." << endl;
-    cout << "========================================" << endl;
+            if (!valid)
+            {
+                cout << "\n========================================" << endl;
+                cout << "Invalid Secret Word!" << endl;
+                cout << "Please enter letters only." << endl;
+                cout << "========================================" << endl;
 
-    pauseScreen();
-    continue;
-}
+                pauseScreen();
+                continue;
+            }
 
-wordLength = secretWord.length();
+        wordLength = secretWord.length();
 
         clearScreen();
 
