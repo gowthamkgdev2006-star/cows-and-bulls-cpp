@@ -29,9 +29,9 @@ void player2()
     {
         clearScreen();
 
-        cout << "==========================================" << endl;
-        cout << "           PLAYER 2 : GUESS WORD          " << endl;
-        cout << "==========================================" << endl << endl;
+        cout << "========================================" << endl;
+        cout << "         PLAYER 2 : GUESS WORD          " << endl;
+        cout << "========================================" << endl << endl;
 
         cout << "Word Length : " << wordLength << endl;
         cout << "Attempts    : " << attempts << endl << endl;
@@ -71,51 +71,73 @@ void player2()
         }
 
         attempts++;
-
         guessHistory[attempts - 1] = guessWord;
+
+        //---------------------------------------------------
+        // Bulls & Cows (Duplicate Letter Safe)
+        //---------------------------------------------------
 
         string result = "";
 
-        // Bulls & Cows
+        bool secretUsed[100] = { false };
+        bool guessUsed[100] = { false };
+
+        // Bulls
         for (int i = 0; i < wordLength; i++)
         {
             if (guessWord[i] == secretWord[i])
             {
                 result += "B";
+                secretUsed[i] = true;
+                guessUsed[i] = true;
             }
             else
             {
-                bool found = false;
-
-                for (int j = 0; j < wordLength; j++)
-                {
-                    if (guessWord[i] == secretWord[j])
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found)
-                    result += "C";
-                else
-                    result += "X";
+                result += " ";
             }
+        }
+
+        // Cows
+        for (int i = 0; i < wordLength; i++)
+        {
+            if (guessUsed[i])
+                continue;
+
+            bool found = false;
+
+            for (int j = 0; j < wordLength; j++)
+            {
+                if (!secretUsed[j] &&
+                    guessWord[i] == secretWord[j])
+                {
+                    found = true;
+                    secretUsed[j] = true;
+                    break;
+                }
+            }
+
+            if (found)
+                result[i] = 'C';
+            else
+                result[i] = 'X';
         }
 
         resultHistory[attempts - 1] = result;
 
+        //---------------------------------------------------
         // Win
+        //---------------------------------------------------
+
         if (guessWord == secretWord)
         {
             clearScreen();
 
-            cout << "==========================================" << endl;
-            cout << "              YOU WIN!                    " << endl;
-            cout << "==========================================" << endl << endl;
+            cout << "========================================" << endl;
+            cout << "               YOU WIN!                 " << endl;
+            cout << "========================================" << endl << endl;
 
             cout << "Secret Word : " << secretWord << endl;
-            cout << "Attempts    : " << attempts << endl;
+            cout << "Attempts    : " << attempts << endl << endl;
 
             break;
         }
@@ -176,9 +198,7 @@ void player1()
         cout << "Secret Word : " << secretWord << endl;
         cout << "Word Length : " << wordLength << endl;
         cout << "========================================" << endl;
-        cout << "[C] Confirm" << endl;
-        cout << "[E] Edit Word" << endl;
-        cout << "[M] Main Menu" << endl;
+        cout << "[C] Confirm    [E] Edit Word    [M] Main Menu" << endl;
 
         char choice;
         cin >> choice;
@@ -209,9 +229,9 @@ void player1()
 void easyMenu()
 {
     // Display Easy Level Menu
-    cout << "=====================================" << endl;
-    cout << "              EASY MODE              " << endl;
-    cout << "=====================================" << endl;
+    cout << "========================================" << endl;
+    cout << "                EASY MODE               " << endl;
+    cout << "========================================" << endl;
     cout << "Welcome to Easy Mode!" << endl;
     cout << "Player 1 : Secret Word Creator" << endl;
     cout << "Player 2 : Word Finder" << endl <<endl;
